@@ -20,7 +20,7 @@ import { Units } from "@/lib/constants";
 import { getAllFontList } from "@/lib/fontProviders";
 import { fontAtom } from "@/lib/statemanager";
 import { useAtom } from "jotai";
-import { Boxes, Download, Github, Loader2 } from "lucide-react";
+import { Boxes, Download, Loader2 } from "lucide-react";
 import { useCallback, useState } from "react";
 import { CardTab, IconTab, LayoutTab, MenuList, TextTab } from "./_tabs";
 import { DisplayCard } from "./DisplayCard";
@@ -86,19 +86,11 @@ export default function Home() {
                 <div className="flex items-center">
                   <Boxes size={32} />
                   <span className="ml-2 text-center text-2xl font-semibold [text-wrap:balance]">
-                    Wordmark.
+                    SPAIK.
                   </span>
                 </div>
                 <div className="mt-1 flex items-center text-xs text-muted-foreground">
-                  <span>
-                    Created by{" "}
-                    <a
-                      href="https://github.com/abhay-ramesh"
-                      className="text-primary hover:underline"
-                    >
-                      Abhay Ramesh
-                    </a>
-                  </span>
+                  <span>Internal Logomaker</span>
                 </div>
               </div>
 
@@ -190,19 +182,11 @@ export default function Home() {
           <div className="flex items-center">
             <Boxes size={28} />
             <span className="ml-2 text-center text-xl font-semibold [text-wrap:balance]">
-              Wordmark.
+              SPAIK.
             </span>
           </div>
           <div className="mt-1 flex items-center justify-center text-xs text-muted-foreground">
-            <span>
-              Created by{" "}
-              <a
-                href="https://github.com/abhay-ramesh"
-                className="text-primary hover:underline"
-              >
-                Abhay Ramesh
-              </a>
-            </span>
+            <span>Internal Logomaker</span>
           </div>
         </div>
 
@@ -271,17 +255,11 @@ export default function Home() {
           </Tabs>
         </aside>
 
-        {/* Mobile GitHub star link */}
+        {/* Mobile footer */}
         <div className="mt-2 flex flex-row items-center justify-center rounded-lg border px-4 py-3">
-          <a
-            href="https://github.com/abhay-ramesh/wordmark"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-1 text-xs"
-          >
-            <Github size={16} className="mr-1" />
-            <span>Star on GitHub</span>
-          </a>
+          <span className="text-xs text-muted-foreground">
+            SPAIK Logomaker - Internal Tool
+          </span>
         </div>
       </div>
     </div>

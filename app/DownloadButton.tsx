@@ -141,9 +141,9 @@ export const DownloadButton = forwardRef<
       // Sanitize text for use in filename (remove invalid chars)
       const sanitizedText = textContent
         ? textContent.replace(/[/\\?%*:|"<>]/g, "-").substring(0, 30)
-        : "wordmark";
+        : "spaik";
 
-      const filename = `${sanitizedText} - wordmark - ${timestamp}.${format}`;
+      const filename = `spaik-${sanitizedText}-${timestamp}.${format}`;
 
       const link = document.createElement("a");
       link.download = filename;

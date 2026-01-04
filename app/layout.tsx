@@ -8,40 +8,38 @@ import { Providers } from "./Providers";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Wordmark - Google Fonts Logo Maker",
+  title: "SPAIK Logomaker",
   description:
-    "Meet Wordmark - Google Fonts Logo Maker. No fuss, just smart logo creation. Pick from Google's font treasure and craft your brand's vibe. Perfect for devs, easy for all entrepreneurs.",
-  applicationName: "Wordmark",
+    "Create consistent logos for SPAIK tools and products. Internal branding tool with export presets for marketing, sales, and product launches.",
+  applicationName: "SPAIK Logomaker",
   keywords: [
     "logo maker",
-    "logo generator",
-    "logo with google fonts",
-    "google fonts logo maker",
-    "google fonts logo generator",
-    "logo maker with google fonts",
-    "logo generator with google fonts",
-    "font logo maker",
+    "branding tool",
+    "internal tools",
+    "micro-saas branding",
+    "export presets",
+    "spaik",
   ],
-  creator: "Abhay Ramesh <abhayramesh.com>",
+  creator: "SPAIK",
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://wordmark.abhayramesh.com/",
-    title: "Wordmark - Google Fonts Logo Maker",
+    url: "https://logomaker.spaik.io/",
+    title: "SPAIK Logomaker",
     description:
-      "Meet Wordmark - Google Fonts Logo Maker. No fuss, just smart logo creation. Pick from Google's font treasure and craft your brand's vibe. Perfect for devs, easy for all entrepreneurs.",
+      "Create consistent logos for SPAIK tools and products. Internal branding tool with export presets for marketing, sales, and product launches.",
     images: [
       {
-        url: "https://wordmark.abhayramesh.com/Wordmark.png",
+        url: "/SPAIK-OG.png",
         width: 1200,
         height: 630,
-        alt: "Wordmark Logo Maker",
+        alt: "SPAIK Logomaker",
       },
     ],
-    siteName: "Wordmark",
+    siteName: "SPAIK Logomaker",
   },
-  abstract: "Meet Wordmark - Google Fonts Logo Maker.",
-  themeColor: "#ffffff",
+  abstract: "SPAIK Logomaker - Internal branding tool.",
+  themeColor: "#ff7150",
   manifest: "/manifest.json",
 };
 

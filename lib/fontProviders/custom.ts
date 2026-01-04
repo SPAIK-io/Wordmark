@@ -59,37 +59,105 @@ export const loadCustomFonts = () => {
   return null;
 };
 
-// Example Custom font data structure
+// SPAIK brand fonts for internal branding consistency
 export const customFontList: CustomFontItem[] = [
-  // You'll need to add your custom fonts here
-  // Example:
-  // {
-  //   family: 'MyCustomFont',
-  //   variants: ['regular', 'bold'],
-  //   subsets: ['latin'],
-  //   version: '1.0',
-  //   lastModified: '2023-01-01',
-  //   files: {
-  //     regular: '/fonts/custom/my-custom-font.woff2',
-  //     bold: '/fonts/custom/my-custom-font-bold.woff2'
-  //   },
-  //   category: 'sans-serif',
-  //   kind: 'webfont',
-  //   menu: '',
-  //   provider: 'custom',
-  //   fontFace: [
-  //     {
-  //       family: 'MyCustomFont',
-  //       style: 'normal',
-  //       weight: '400',
-  //       src: '/fonts/custom/my-custom-font.woff2'
-  //     },
-  //     {
-  //       family: 'MyCustomFont',
-  //       style: 'normal',
-  //       weight: '700',
-  //       src: '/fonts/custom/my-custom-font-bold.woff2'
-  //     }
-  //   ]
-  // }
+  {
+    family: "Ivy Presto Headline",
+    variants: ["100"],
+    subsets: ["latin"],
+    version: "1.0",
+    lastModified: "2025-01-04",
+    files: {
+      regular: "/fonts/spaik/IvyPrestoHeadline-Thin.otf",
+    },
+    category: "serif",
+    kind: "webfont",
+    menu: "serif",
+    provider: "custom",
+    fontFace: [
+      {
+        family: "Ivy Presto Headline",
+        style: "normal",
+        weight: "100",
+        display: "swap",
+        src: "/fonts/spaik/IvyPrestoHeadline-Thin.otf",
+      },
+    ],
+  },
+  {
+    family: "PP Agrandir Tight",
+    variants: ["regular", "500", "bold"],
+    subsets: ["latin"],
+    version: "1.0",
+    lastModified: "2025-01-04",
+    files: {
+      regular: "/fonts/spaik/PPAgrandir-TightRegular.ttf",
+      bold: "/fonts/spaik/PPAgrandir-TightBold.ttf",
+    },
+    category: "sans-serif",
+    kind: "webfont",
+    menu: "sans-serif",
+    provider: "custom",
+    fontFace: [
+      {
+        family: "PP Agrandir Tight",
+        style: "normal",
+        weight: "400",
+        display: "swap",
+        src: "/fonts/spaik/PPAgrandir-TightRegular.ttf",
+      },
+      {
+        family: "PP Agrandir Tight",
+        style: "normal",
+        weight: "500",
+        display: "swap",
+        src: "/fonts/spaik/PPAgrandir-TightMedium.ttf",
+      },
+      {
+        family: "PP Agrandir Tight",
+        style: "normal",
+        weight: "700",
+        display: "swap",
+        src: "/fonts/spaik/PPAgrandir-TightBold.ttf",
+      },
+    ],
+  },
+  {
+    family: "SF Pro Text",
+    variants: ["regular", "500", "bold"],
+    subsets: ["latin"],
+    version: "1.0",
+    lastModified: "2025-01-04",
+    files: {
+      regular: "/fonts/spaik/SFProText-Regular.otf",
+      bold: "/fonts/spaik/SFProText-Bold.otf",
+    },
+    category: "sans-serif",
+    kind: "webfont",
+    menu: "sans-serif",
+    provider: "custom",
+    fontFace: [
+      {
+        family: "SF Pro Text",
+        style: "normal",
+        weight: "400",
+        display: "swap",
+        src: "/fonts/spaik/SFProText-Regular.otf",
+      },
+      {
+        family: "SF Pro Text",
+        style: "normal",
+        weight: "500",
+        display: "swap",
+        src: "/fonts/spaik/SFProText-Medium.otf",
+      },
+      {
+        family: "SF Pro Text",
+        style: "normal",
+        weight: "700",
+        display: "swap",
+        src: "/fonts/spaik/SFProText-Bold.otf",
+      },
+    ],
+  },
 ];

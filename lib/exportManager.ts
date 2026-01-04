@@ -36,7 +36,7 @@ export const exportAllData = (): void => {
     },
   };
 
-  downloadJSON(exportData, "wordmark-all-data");
+  downloadJSON(exportData, "spaik-all-data");
 };
 
 /**
@@ -55,7 +55,7 @@ export const exportFavorites = (): void => {
     },
   };
 
-  downloadJSON(exportData, "wordmark-favorites");
+  downloadJSON(exportData, "spaik-favorites");
 };
 
 /**
@@ -74,7 +74,7 @@ export const exportHistory = (): void => {
     },
   };
 
-  downloadJSON(exportData, "wordmark-history");
+  downloadJSON(exportData, "spaik-history");
 };
 
 /**
@@ -104,7 +104,7 @@ export const exportCurrentDesign = (): void => {
     },
   };
 
-  downloadJSON(exportData, "wordmark-current-design");
+  downloadJSON(exportData, "spaik-current-design");
 };
 
 /**
@@ -126,13 +126,13 @@ export const exportSelectedFavorites = (favoriteIds: string[]): void => {
     },
   };
 
-  downloadJSON(exportData, "wordmark-selected-favorites");
+  downloadJSON(exportData, "spaik-selected-favorites");
 };
 
 /**
  * Helper function to download data as a JSON file
  */
-function downloadJSON(data: any, filename: string): void {
+function downloadJSON(data: ExportDataType, filename: string): void {
   const blob = new Blob([JSON.stringify(data, null, 2)], {
     type: "application/json",
   });

@@ -29,17 +29,18 @@ export const textWithFontAtom = atom(
 );
 
 export const fontAtom = atom<FontItem | undefined>({
-  family: "Inter",
-  variants: ["regular"],
+  family: "PP Agrandir Tight",
+  variants: ["regular", "500", "bold"],
   subsets: ["latin"],
-  version: "3.19",
-  lastModified: "2021-04-27",
+  version: "1.0",
+  lastModified: "2025-01-04",
   files: {
-    regular: "http://fonts.gstatic.com/s/inter/v3/3qjtzSFDUh2N3qznfJw.ttf",
+    regular: "/fonts/spaik/PPAgrandir-TightRegular.ttf",
+    bold: "/fonts/spaik/PPAgrandir-TightBold.ttf",
   },
   category: "sans-serif",
-  kind: "webfonts#webfont",
-  menu: "serif",
+  kind: "webfont",
+  menu: "sans-serif",
 });
 
 export const textAtom = atom<{
@@ -51,7 +52,7 @@ export const textAtom = atom<{
   fontWeight: string;
   textTransform: "none" | "uppercase" | "lowercase" | "capitalize";
 }>({
-  text: "Wordmark.",
+  text: "SPAIK.",
   color: {
     hex: "#000000",
     rgb: {
@@ -81,17 +82,17 @@ export const iconAtom = atom<{
 }>({
   icon: "boxes",
   color: {
-    hex: "#000000",
+    hex: "#ff7150",
     rgb: {
-      r: 0,
-      g: 0,
-      b: 0,
+      r: 255,
+      g: 113,
+      b: 80,
       a: 1,
     },
     hsv: {
-      h: 0,
-      s: 0,
-      v: 0,
+      h: 14,
+      s: 69,
+      v: 100,
       a: 1,
     },
   },

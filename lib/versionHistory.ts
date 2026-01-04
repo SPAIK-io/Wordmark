@@ -66,7 +66,7 @@ export const currentVersionIndexAtom = atom<number>(-1);
 
 // Favorites atom with localStorage persistence
 export const favoriteVersionsAtom = atomWithStorage<FavoriteVersion[]>(
-  "wordmark-favorites",
+  "spaik-favorites",
   [],
 );
 
