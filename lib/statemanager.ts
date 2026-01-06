@@ -1,9 +1,11 @@
 import { Layouts } from "@/components/custom/SelectableLayoutCard";
 import { LucideIconType } from "@/components/icons";
 import { atom } from "jotai";
+import { atomWithStorage } from "jotai/utils";
 import { IColor } from "react-color-palette";
 import { Units } from "./constants";
 import { FontItem } from "./fonts";
+import type { AIGeneratedIcon, AIGenerationState } from "./ai/types";
 
 export const layoutAtom = atom<Layouts>("ltr");
 
@@ -98,6 +100,30 @@ export const iconAtom = atom<{
   },
   size: 32,
 });
+
+// ============================================
+// AI-Generated Icon State
+// ============================================
+
+/** Currently selected AI-generated icon (null if using Lucide) */
+export const aiIconAtom = atom<AIGeneratedIcon | null>(null);
+
+/** AI icon generation loading/progress state */
+export const aiGenerationAtom = atom<AIGenerationState>({
+  isLoading: false,
+  error: null,
+  progress: "idle",
+});
+
+/** Persisted history of generated AI icons (localStorage) */
+export const aiIconHistoryAtom = atomWithStorage<AIGeneratedIcon[]>(
+  "wordmark-ai-icons",
+  []
+);
+
+// ============================================
+// Card State
+// ============================================
 
 type UnitType = (typeof Units)[number];
 

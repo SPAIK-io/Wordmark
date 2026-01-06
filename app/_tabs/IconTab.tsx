@@ -4,13 +4,30 @@ import { NumberInputWithSlider } from "@/components/custom/NumberInputWithSlider
 import { SectionHeader } from "@/components/custom/SectionHeader";
 import { LucideIconType } from "@/components/icons";
 import { IconSelector } from "@/components/icons/IconSelector";
+import { AIIconGenerator } from "@/components/ai";
 import { TabsContent } from "@/components/ui/tabs";
-import { iconAtom } from "@/lib/statemanager";
-import { useAtom } from "jotai";
-import { Image, SlidersHorizontal } from "lucide-react";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
+import { iconAtom, aiIconAtom } from "@/lib/statemanager";
+import { useAtom, useSetAtom } from "jotai";
+import { Image, SlidersHorizontal, Sparkles, ChevronDown } from "lucide-react";
+import { useState } from "react";
+import { cn } from "@/lib/utils";
 
 export function IconTab() {
   const [icon, setIcon] = useAtom(iconAtom);
+  const setAiIcon = useSetAtom(aiIconAtom);
+  const [aiOpen, setAiOpen] = useState(false);
+
+  const handleIconSelect = (selectedIcon: string) => {
+    // Clear AI icon when selecting a Lucide icon
+    setAiIcon(null);
+    setIcon((prev) => ({ ...prev, icon: selectedIcon as LucideIconType }));
+  };
+
   return (
     <TabsContent value="icon" className="w-full overflow-y-auto p-0">
       <div className="flex flex-col gap-6 border-b p-4">
@@ -66,10 +83,32 @@ export function IconTab() {
         <IconSelector
           id="icon-picker"
           value={icon.icon}
-          onChange={(icon) =>
-            setIcon((prev) => ({ ...prev, icon: icon as LucideIconType }))
-          }
+          onChange={handleIconSelect}
         />
+      </div>
+
+      {/* AI Generated Section */}
+      <div className="border-t p-4">
+        <Collapsible open={aiOpen} onOpenChange={setAiOpen}>
+          <CollapsibleTrigger className="flex w-full items-center justify-between">
+            <SectionHeader
+              title="AI Generated"
+              icon={Sparkles}
+              badge="Beta"
+              description="Generate custom logos with AI"
+              className="flex-1"
+            />
+            <ChevronDown
+              className={cn(
+                "h-4 w-4 text-muted-foreground transition-transform",
+                aiOpen && "rotate-180"
+              )}
+            />
+          </CollapsibleTrigger>
+          <CollapsibleContent className="pt-4">
+            <AIIconGenerator />
+          </CollapsibleContent>
+        </Collapsible>
       </div>
     </TabsContent>
   );

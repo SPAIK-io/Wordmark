@@ -9,14 +9,25 @@ import {
   iconAtom,
   layoutAtom,
   textAtom,
+  aiIconAtom,
 } from "@/lib/statemanager";
 import { cn } from "@/lib/utils";
 import { useAtom, useAtomValue } from "jotai";
 import { useEffect, useState } from "react";
 
+/** Replace fill/stroke colors in SVG with specified color */
+function colorizeSvg(svg: string, color: string): string {
+  return svg
+    .replace(/fill="[^"]*"/g, `fill="${color}"`)
+    .replace(/stroke="[^"]*"/g, `stroke="${color}"`)
+    .replace(/fill:[^;"]*/g, `fill:${color}`)
+    .replace(/stroke:[^;"]*/g, `stroke:${color}`);
+}
+
 export function DisplayCard() {
   const selectedFont = useAtomValue(fontAtom);
   const icon = useAtomValue(iconAtom);
+  const aiIcon = useAtomValue(aiIconAtom);
   const layout = useAtomValue(layoutAtom);
   const card = useAtomValue(cardAtom);
   const [textState, setTextState] = useAtom(textAtom);
@@ -67,18 +78,25 @@ export function DisplayCard() {
           width: card.width.value + card.width.unit,
         }}
       >
-        {layout !== "text" && (
-          // <LucideIcon
-          //   name={icon as LucideIconType}
-          //   size={32}
-          //   style={{ color: iconColor.hex }}
-          // />
-          <LucideIconStatic
-            name={icon.icon as LucideIconType}
-            size={icon.size}
-            style={{ color: icon.color.hex }}
-          />
-        )}
+        {layout !== "text" &&
+          (aiIcon ? (
+            <div
+              style={{
+                width: icon.size,
+                height: icon.size,
+              }}
+              className="[&>svg]:h-full [&>svg]:w-full"
+              dangerouslySetInnerHTML={{
+                __html: colorizeSvg(aiIcon.svgData, icon.color.hex),
+              }}
+            />
+          ) : (
+            <LucideIconStatic
+              name={icon.icon as LucideIconType}
+              size={icon.size}
+              style={{ color: icon.color.hex }}
+            />
+          ))}
         {layout !== "icon" && layout !== "circle" && (
           <>
             <div
