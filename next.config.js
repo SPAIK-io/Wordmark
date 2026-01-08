@@ -7,6 +7,9 @@ const withPWA = require('next-pwa')({
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     transpilePackages: ['lucide-react'],
+    experimental: {
+        serverComponentsExternalPackages: ['@neplex/vectorizer'],
+    },
 };
 
 module.exports = withPWA(nextConfig);
