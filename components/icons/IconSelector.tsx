@@ -1,10 +1,9 @@
 "use client";
 import {
-  LucideIcon,
   LucideIconList,
   LucideIconStatic,
+  LucideIconType,
 } from "@/components/icons";
-import { LucideIconType } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { X } from "lucide-react";
