@@ -1,9 +1,9 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { cardAtom, textAtom } from "@/lib/statemanager";
+import { cardAtom, textAtom, exportDialogOpenAtom } from "@/lib/statemanager";
 import { toJpeg, toPng, toSvg } from "html-to-image";
-import { atom, useAtom, useAtomValue } from "jotai";
-import { Download, Loader2 } from "lucide-react";
+import { atom, useAtom, useAtomValue, useSetAtom } from "jotai";
+import { Download, Loader2, Package } from "lucide-react";
 import { event } from "nextjs-google-analytics";
 import { forwardRef, useEffect, useImperativeHandle } from "react";
 
@@ -11,14 +11,18 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { toast } from "@/components/ui/use-toast";
 import { Options } from "html-to-image/lib/types";
 import posthog from "posthog-js";
+import type { DownloadFormat } from "@/lib/types/design";
 
-const formats = ["png", "svg", "jpeg"] as const;
-export type DownloadFormat = (typeof formats)[number];
+const formats: DownloadFormat[] = ["png", "svg", "jpeg"];
+
+// Re-export DownloadFormat for backwards compatibility
+export type { DownloadFormat };
 
 // Create download state with Jotai
 interface DownloadState {
@@ -110,6 +114,7 @@ export const DownloadButton = forwardRef<
   const card = useAtomValue(cardAtom);
   const textState = useAtomValue(textAtom);
   const { isLoading, currentFormat, setLoading } = useDownloadStore();
+  const setExportDialogOpen = useSetAtom(exportDialogOpenAtom);
 
   const handleDownload = async (format: DownloadFormat) => {
     if (isLoading) return;
@@ -179,6 +184,10 @@ export const DownloadButton = forwardRef<
     }
   };
 
+  const handleBatchExport = () => {
+    setExportDialogOpen(true);
+  };
+
   // Expose the download method via ref
   useImperativeHandle(ref, () => ({
     download: handleDownload,
@@ -226,6 +235,15 @@ export const DownloadButton = forwardRef<
             )}
           </DropdownMenuItem>
         ))}
+        <DropdownMenuSeparator className="bg-border/50" />
+        <DropdownMenuItem
+          className="flex w-full items-center justify-center gap-1.5 rounded-full border bg-popover p-2 text-center hover:bg-gray-100"
+          onClick={handleBatchExport}
+          disabled={isLoading}
+        >
+          <Package size={14} />
+          <span className="text-xs">Batch</span>
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

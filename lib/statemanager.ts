@@ -6,6 +6,12 @@ import { IColor } from "react-color-palette";
 import { Units } from "./constants";
 import { FontItem } from "./fonts";
 import type { AIGeneratedIcon, AIGenerationState } from "./ai/types";
+import type {
+  DesignSnapshot,
+  UndoRedoState,
+  ExportPreset,
+  DownloadFormat,
+} from "./types/design";
 
 export const layoutAtom = atom<Layouts>("ltr");
 
@@ -164,3 +170,179 @@ export const cardAtom = atom<{
   },
   ratioLocked: false,
 });
+
+// ============================================
+// Undo/Redo State Management
+// ============================================
+
+/** Maximum number of snapshots to keep in history */
+const MAX_HISTORY_SIZE = 50;
+
+/** Creates a snapshot of the current design state */
+export const currentSnapshotAtom = atom((get): DesignSnapshot => ({
+  text: get(textAtom),
+  icon: get(iconAtom),
+  card: get(cardAtom),
+  layout: get(layoutAtom),
+  timestamp: Date.now(),
+}));
+
+/** Undo/redo history state */
+export const undoRedoAtom = atom<UndoRedoState>({
+  past: [],
+  present: {
+    text: {
+      text: "SPAIK.",
+      color: {
+        hex: "#000000",
+        rgb: { r: 0, g: 0, b: 0, a: 1 },
+        hsv: { h: 0, s: 0, v: 0, a: 1 },
+      },
+      size: 24,
+      lineHeight: 1.2,
+      letterSpacing: 0,
+      fontWeight: "regular",
+      textTransform: "none",
+    },
+    icon: {
+      icon: "boxes",
+      color: {
+        hex: "#ff7150",
+        rgb: { r: 255, g: 113, b: 80, a: 1 },
+        hsv: { h: 14, s: 69, v: 100, a: 1 },
+      },
+      size: 32,
+    },
+    card: {
+      color: {
+        hex: "#ffffff",
+        rgb: { r: 255, g: 255, b: 255, a: 1 },
+        hsv: { h: 0, s: 0, v: 1, a: 1 },
+      },
+      width: { value: 400, unit: "px" },
+      height: { value: 225, unit: "px" },
+      ratioLocked: false,
+    },
+    layout: "ltr",
+    timestamp: Date.now(),
+  },
+  future: [],
+});
+
+/** Check if undo is available */
+export const canUndoAtom = atom((get) => get(undoRedoAtom).past.length > 0);
+
+/** Check if redo is available */
+export const canRedoAtom = atom((get) => get(undoRedoAtom).future.length > 0);
+
+/** Push a new snapshot to history */
+export const pushSnapshotAtom = atom(null, (get, set) => {
+  const snapshot = get(currentSnapshotAtom);
+  const state = get(undoRedoAtom);
+
+  const newPast = [...state.past, state.present].slice(-MAX_HISTORY_SIZE);
+
+  set(undoRedoAtom, {
+    past: newPast,
+    present: snapshot,
+    future: [], // Clear redo stack on new action
+  });
+});
+
+/** Undo action */
+export const undoAtom = atom(null, (get, set) => {
+  const state = get(undoRedoAtom);
+  if (state.past.length === 0) return;
+
+  const previous = state.past[state.past.length - 1];
+  const newPast = state.past.slice(0, -1);
+
+  // Restore the previous state
+  set(textAtom, previous.text);
+  set(iconAtom, previous.icon);
+  set(cardAtom, previous.card);
+  set(layoutAtom, previous.layout);
+
+  set(undoRedoAtom, {
+    past: newPast,
+    present: previous,
+    future: [state.present, ...state.future],
+  });
+});
+
+/** Redo action */
+export const redoAtom = atom(null, (get, set) => {
+  const state = get(undoRedoAtom);
+  if (state.future.length === 0) return;
+
+  const next = state.future[0];
+  const newFuture = state.future.slice(1);
+
+  // Restore the next state
+  set(textAtom, next.text);
+  set(iconAtom, next.icon);
+  set(cardAtom, next.card);
+  set(layoutAtom, next.layout);
+
+  set(undoRedoAtom, {
+    past: [...state.past, state.present],
+    present: next,
+    future: newFuture,
+  });
+});
+
+// ============================================
+// Export Dialog State
+// ============================================
+
+/** Simple boolean atom for export dialog open/close state */
+export const exportDialogOpenAtom = atom<boolean>(false);
+
+export interface ExportDialogState {
+  isOpen: boolean;
+  selectedPresets: string[];
+  selectedFormats: DownloadFormat[];
+  isExporting: boolean;
+  progress: number;
+  error: string | null;
+}
+
+export const exportDialogAtom = atom<ExportDialogState>({
+  isOpen: false,
+  selectedPresets: [],
+  selectedFormats: ["png"],
+  isExporting: false,
+  progress: 0,
+  error: null,
+});
+
+/** Persisted export preferences */
+export const exportPreferencesAtom = atomWithStorage<{
+  lastUsedPresets: string[];
+  lastUsedFormats: DownloadFormat[];
+  preferredScale: number;
+}>("wordmark-export-preferences", {
+  lastUsedPresets: [],
+  lastUsedFormats: ["png"],
+  preferredScale: 2,
+});
+
+// ============================================
+// Color Palette State
+// ============================================
+
+export interface SavedColor {
+  id: string;
+  color: IColor;
+  name?: string;
+  createdAt: number;
+}
+
+/** Persisted color palette (localStorage) */
+export const colorPaletteAtom = atomWithStorage<SavedColor[]>(
+  "wordmark-color-palette",
+  []
+);
+
+/** Recently used colors (session only) */
+export const recentColorsAtom = atom<IColor[]>([]);

@@ -1,6 +1,7 @@
 "use client";
 
 import { CommandPalette } from "@/components/CommandPalette";
+import { ExportDialog } from "@/components/custom/ExportDialog";
 import { KeyboardShortcuts } from "@/components/KeyboardShortcuts";
 import { Button } from "@/components/ui/button";
 import {
@@ -18,10 +19,11 @@ import { Separator } from "@/components/ui/separator";
 import { Tabs } from "@/components/ui/tabs";
 import { Units } from "@/lib/constants";
 import { getAllFontList } from "@/lib/fontProviders";
-import { fontAtom } from "@/lib/statemanager";
-import { useAtom } from "jotai";
+import { fontAtom, textAtom } from "@/lib/statemanager";
+import { useAtom, useAtomValue } from "jotai";
 import { Boxes, Download, Loader2 } from "lucide-react";
 import { useCallback, useState } from "react";
+import { ThemeToggleSimple } from "@/components/custom/ThemeToggle";
 import { CardTab, IconTab, LayoutTab, MenuList, TextTab } from "./_tabs";
 import { DisplayCard } from "./DisplayCard";
 import {
@@ -38,6 +40,7 @@ export default function Home() {
   // Command palette state
   const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
   const [_, setSelectedFont] = useAtom(fontAtom);
+  const textState = useAtomValue(textAtom);
   const { isLoading, currentFormat } = useDownloadStore();
 
   // Select a random font function
@@ -59,6 +62,9 @@ export default function Home() {
     <div className="relative flex min-h-screen flex-col-reverse justify-end space-y-2 space-y-reverse p-4 md:h-screen md:space-y-0">
       {/* Invisible DownloadButton to initialize the download handler */}
       <DownloadButton invisible />
+
+      {/* Export dialog for batch exports */}
+      <ExportDialog textContent={textState?.text} />
 
       {/* Keyboard shortcuts */}
       <KeyboardShortcuts
@@ -83,14 +89,20 @@ export default function Home() {
           <ResizablePanel defaultSize={40} minSize={30} className="h-full">
             <div className="flex h-full w-full flex-col">
               <div className="flex h-20 w-full flex-none flex-col items-center justify-center rounded-t-lg border-b bg-primary-foreground text-center text-gray-600 dark:text-gray-300">
-                <div className="flex items-center">
-                  <Boxes size={32} />
-                  <span className="ml-2 text-center text-2xl font-semibold [text-wrap:balance]">
-                    SPAIK.
-                  </span>
-                </div>
-                <div className="mt-1 flex items-center text-xs text-muted-foreground">
-                  <span>Internal Logomaker</span>
+                <div className="flex w-full items-center justify-between px-4">
+                  <div className="w-8" /> {/* Spacer for balance */}
+                  <div className="flex flex-col items-center">
+                    <div className="flex items-center">
+                      <Boxes size={32} />
+                      <span className="ml-2 text-center text-2xl font-semibold [text-wrap:balance]">
+                        SPAIK.
+                      </span>
+                    </div>
+                    <div className="mt-1 flex items-center text-xs text-muted-foreground">
+                      <span>Internal Logomaker</span>
+                    </div>
+                  </div>
+                  <ThemeToggleSimple size="sm" />
                 </div>
               </div>
 
@@ -179,14 +191,20 @@ export default function Home() {
       {/* Mobile View - Stacked Layout */}
       <div className="flex w-full flex-col md:hidden">
         <div className="flex h-20 w-full flex-col items-center justify-center rounded-lg border bg-primary-foreground text-center">
-          <div className="flex items-center">
-            <Boxes size={28} />
-            <span className="ml-2 text-center text-xl font-semibold [text-wrap:balance]">
-              SPAIK.
-            </span>
-          </div>
-          <div className="mt-1 flex items-center justify-center text-xs text-muted-foreground">
-            <span>Internal Logomaker</span>
+          <div className="flex w-full items-center justify-between px-4">
+            <div className="w-8" /> {/* Spacer for balance */}
+            <div className="flex flex-col items-center">
+              <div className="flex items-center">
+                <Boxes size={28} />
+                <span className="ml-2 text-center text-xl font-semibold [text-wrap:balance]">
+                  SPAIK.
+                </span>
+              </div>
+              <div className="mt-1 flex items-center justify-center text-xs text-muted-foreground">
+                <span>Internal Logomaker</span>
+              </div>
+            </div>
+            <ThemeToggleSimple size="sm" />
           </div>
         </div>
 
