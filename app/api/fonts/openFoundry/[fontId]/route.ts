@@ -61,8 +61,6 @@ export async function GET(
     // If the request is for a font file directly (includes extension)
     if (fontId.includes(".")) {
       const fontUrl = `https://open-foundry.com/data/fonts/${fontId}`;
-      console.log(`Proxying direct font request to: ${fontUrl}`);
-
       return await fetchAndServeFont(fontUrl);
     }
 
@@ -79,8 +77,6 @@ export async function GET(
     }
 
     const fontUrl = `https://open-foundry.com/data/fonts/${fontFileName}`;
-    console.log(`Proxying mapped font request to: ${fontUrl}`);
-
     return await fetchAndServeFont(fontUrl);
   } catch (error) {
     console.error("Error fetching font:", error);
@@ -113,8 +109,6 @@ async function fetchAndServeFont(fontUrl: string): Promise<NextResponse> {
     // Try with .ttf if .otf fails
     if (extension === "otf") {
       const ttfUrl = fontUrl.replace(".otf", ".ttf");
-      console.log(`Trying TTF instead: ${ttfUrl}`);
-
       const ttfResponse = await fetch(ttfUrl, {
         method: "GET",
         headers: {

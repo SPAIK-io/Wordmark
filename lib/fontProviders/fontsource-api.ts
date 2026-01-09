@@ -124,8 +124,6 @@ export const fetchFontsourceFonts = async (
     // Fetch raw API data if not cached
     let apiData: FontsourceAPIFont[];
     if (!apiCache.allFonts) {
-      console.log("Fetching all fonts from Fontsource API");
-
       const response = await fetch(API_ENDPOINT, {
         headers: {
           Accept: "application/json",
@@ -141,8 +139,6 @@ export const fetchFontsourceFonts = async (
       const data: FontsourceAPIFont[] = await response.json();
       apiCache.allFonts = data;
       apiData = data;
-
-      console.log(`Fetched ${data.length} fonts from Fontsource API`);
     } else {
       apiData = apiCache.allFonts;
     }
@@ -150,9 +146,6 @@ export const fetchFontsourceFonts = async (
     // Get the batch of fonts to process
     const endIndex = Math.min(offset + limit, apiData.length);
     const currentBatch = apiData.slice(offset, endIndex);
-    console.log(
-      `Processing Fontsource API fonts batch: ${offset} to ${endIndex - 1}`,
-    );
 
     // Process the current batch
     const newFonts = await processFontBatch(currentBatch);
@@ -560,13 +553,9 @@ export const loadMoreFontsourceFonts = async (): Promise<number> => {
   const BATCH_SIZE = 200;
 
   try {
-    console.log(
-      `Loading more fonts from offset ${currentOffset}, batch size ${BATCH_SIZE}`,
-    );
     await fetchFontsourceFonts(BATCH_SIZE, currentOffset);
 
     const newFontsCount = fontsourceList.length - prevCount;
-    console.log(`Loaded ${newFontsCount} additional fonts`);
 
     return newFontsCount;
   } catch (error) {
@@ -601,8 +590,6 @@ if (typeof window !== "undefined") {
     fetchFontsourceFonts()
       .then((fonts) => {
         if (fonts.length > 0) {
-          console.log(`Loaded ${fonts.length} Fontsource API fonts`);
-
           // Clear the font cache to ensure the UI updates with the new fonts
           clearFontCache("all");
           clearFontCache("provider_fontSource");

@@ -100,7 +100,6 @@ async function extractFontMappings(): Promise<FontFileMapping> {
   }
 
   try {
-    console.log("Fetching font CSS from Open Foundry...");
     const response = await fetch(OPEN_FOUNDRY_CSS);
     if (!response.ok) {
       throw new Error(`Failed to fetch CSS: ${response.status}`);
@@ -147,9 +146,6 @@ async function extractFontMappings(): Promise<FontFileMapping> {
       }
     }
 
-    console.log(
-      `Extracted ${Object.keys(mappings).length} font mappings from CSS`,
-    );
     fontFileMappings = mappings;
     return mappings;
   } catch (error) {
@@ -267,7 +263,6 @@ async function fetchOpenFoundryFonts(): Promise<ProcessedFont[]> {
   // Return cached results if available and recent
   const now = Date.now();
   if (cachedFonts && now - cacheTime < CACHE_DURATION) {
-    console.log("Returning cached Open Foundry fonts");
     return cachedFonts;
   }
 
@@ -275,7 +270,6 @@ async function fetchOpenFoundryFonts(): Promise<ProcessedFont[]> {
     // Fetch font file mappings from CSS
     const fontMappings = await extractFontMappings();
 
-    console.log("Fetching fonts from Open Foundry API...");
     const response = await fetch(OPEN_FOUNDRY_API, {
       headers: {
         Accept: "application/json",
@@ -294,16 +288,8 @@ async function fetchOpenFoundryFonts(): Promise<ProcessedFont[]> {
       throw new Error("Invalid API response format");
     }
 
-    console.log(`Processing ${data.length} fonts from Open Foundry API`);
-
     // Process each font
     const processedFonts = data.map((font) => processFont(font, fontMappings));
-
-    // Log example of processed fonts
-    console.log("Sample font URLs:");
-    processedFonts.slice(0, 3).forEach((font) => {
-      console.log(`- ${font.family}: ${font.files.regular}`);
-    });
 
     // Update cache
     cachedFonts = processedFonts;

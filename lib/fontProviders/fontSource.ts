@@ -89,7 +89,6 @@ export const fetchFontsourceFonts = async (): Promise<FontsourceItem[]> => {
     if (responseCache.apiData) {
       data = responseCache.apiData;
     } else {
-      console.log("Fetching fonts from FontSource API...");
       const response = await fetch(API_ENDPOINT, {
         headers: {
           Accept: "application/json",
@@ -110,44 +109,13 @@ export const fetchFontsourceFonts = async (): Promise<FontsourceItem[]> => {
 
       // Store in cache
       responseCache.apiData = data;
-
-      // Debug: Check if any fonts have variants
-      const fontsWithVariants = data.filter((font) => font.variants);
-      console.log(
-        `Found ${fontsWithVariants.length} out of ${data.length} fonts with variants property`,
-      );
-
-      if (fontsWithVariants.length > 0) {
-        // Log example variant structure
-        const sampleFont = fontsWithVariants[0];
-        console.log(
-          `Sample font variant structure for ${sampleFont.family}:`,
-          JSON.stringify(sampleFont.variants, null, 2).substring(0, 300) +
-            "...",
-        );
-      }
     }
-
-    console.log(`Processing ${data.length} fonts from Fontsource API`);
 
     // Process fonts in batches to avoid blocking the main thread
     const processedFonts = await processFontsInBatches(data);
 
     // Store processed fonts in cache
     responseCache.processedFonts = processedFonts;
-
-    // Debug: Check if any processed fonts have direct URLs
-    const fontsWithDirectUrls = processedFonts.filter(
-      (font) =>
-        font.files.regular && font.files.regular.includes("cdn.jsdelivr.net"),
-    );
-    console.log(
-      `Found ${fontsWithDirectUrls.length} out of ${processedFonts.length} processed fonts with direct URLs`,
-    );
-
-    if (fontsWithDirectUrls.length > 0) {
-      console.log(`Sample direct URL: ${fontsWithDirectUrls[0].files.regular}`);
-    }
 
     return processedFonts;
   } catch (error) {
@@ -527,7 +495,6 @@ if (typeof window !== "undefined") {
       .then((fonts) => {
         if (fonts.length > 0) {
           fontsourceList = fonts;
-          console.log(`Loaded ${fonts.length} Fontsource fonts`);
 
           // Clear the font cache to ensure the UI updates with the new fonts
           clearFontCache("all");

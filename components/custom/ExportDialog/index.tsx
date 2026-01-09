@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { useAtom, useAtomValue } from "jotai";
-import { Download, Package, Check, Loader2, X } from "lucide-react";
+import { useAtom } from "jotai";
+import { Download, Package } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -13,14 +13,12 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Progress } from "@/components/ui/progress";
 import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   EXPORT_PRESETS,
   PRESET_CATEGORIES,
-  type ExportPreset,
   type PresetCategory,
 } from "@/lib/exportPresets";
 import { exportDialogOpenAtom } from "@/lib/statemanager";
@@ -32,12 +30,14 @@ import {
   type BatchExportProgress,
   type BatchExportResult,
 } from "@/lib/exportUtils";
+import { CompleteStep } from "./CompleteStep";
+import { ExportingStep } from "./ExportingStep";
+import { PresetItem } from "./PresetItem";
+import type { ExportStep } from "./types";
 
 interface ExportDialogProps {
   textContent?: string;
 }
-
-type ExportStep = "select" | "exporting" | "complete";
 
 export function ExportDialog({ textContent = "" }: ExportDialogProps) {
   const [open, setOpen] = useAtom(exportDialogOpenAtom);
@@ -135,9 +135,6 @@ export function ExportDialog({ textContent = "" }: ExportDialogProps) {
     })
   );
 
-  const successCount = results.filter((r) => r.success).length;
-  const failCount = results.filter((r) => !r.success).length;
-
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="max-w-2xl">
@@ -229,89 +226,14 @@ export function ExportDialog({ textContent = "" }: ExportDialogProps) {
         )}
 
         {step === "exporting" && progress && (
-          <div className="space-y-4 py-8">
-            <div className="text-center">
-              <Loader2 className="mx-auto h-8 w-8 animate-spin text-primary" />
-              <p className="mt-4 text-sm text-muted-foreground">
-                Exporting {progress.current} of {progress.total}...
-              </p>
-              <p className="text-xs text-muted-foreground">{progress.currentItem}</p>
-            </div>
-            <Progress value={(progress.current / progress.total) * 100} />
-          </div>
+          <ExportingStep progress={progress} />
         )}
 
         {step === "complete" && (
-          <div className="space-y-4 py-8">
-            <div className="text-center">
-              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100 dark:bg-green-900">
-                <Check className="h-6 w-6 text-green-600 dark:text-green-400" />
-              </div>
-              <h3 className="mt-4 font-semibold">Export Complete</h3>
-              <p className="text-sm text-muted-foreground">
-                {successCount} files exported successfully
-                {failCount > 0 && `, ${failCount} failed`}
-              </p>
-            </div>
-
-            {failCount > 0 && (
-              <div className="rounded-lg border border-destructive/20 bg-destructive/5 p-3">
-                <p className="text-sm font-medium text-destructive">
-                  Failed exports:
-                </p>
-                <ul className="mt-2 text-xs text-muted-foreground">
-                  {results
-                    .filter((r) => !r.success)
-                    .map((r) => (
-                      <li key={r.filename} className="flex items-center gap-2">
-                        <X className="h-3 w-3 text-destructive" />
-                        {r.filename}: {r.error}
-                      </li>
-                    ))}
-                </ul>
-              </div>
-            )}
-
-            <DialogFooter>
-              <Button onClick={handleClose}>Done</Button>
-            </DialogFooter>
-          </div>
+          <CompleteStep results={results} onClose={handleClose} />
         )}
       </DialogContent>
     </Dialog>
-  );
-}
-
-interface PresetItemProps {
-  preset: ExportPreset;
-  checked: boolean;
-  onToggle: () => void;
-}
-
-function PresetItem({ preset, checked, onToggle }: PresetItemProps) {
-  return (
-    <div
-      className="flex cursor-pointer items-center gap-3 rounded-lg border p-3 transition-colors hover:bg-muted/50"
-      onClick={onToggle}
-    >
-      <Checkbox checked={checked} onCheckedChange={onToggle} />
-      <div className="flex-1">
-        <p className="text-sm font-medium">{preset.name}</p>
-        <p className="text-xs text-muted-foreground">
-          {preset.dimensions.width} × {preset.dimensions.height}px
-        </p>
-      </div>
-      <div className="flex gap-1">
-        {preset.formats.map((format) => (
-          <span
-            key={format}
-            className="rounded bg-muted px-1.5 py-0.5 text-xs uppercase"
-          >
-            {format}
-          </span>
-        ))}
-      </div>
-    </div>
   );
 }
 

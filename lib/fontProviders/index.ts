@@ -139,7 +139,6 @@ export const loadMoreFontsByProvider = async (
   // Only handle providers that support incremental loading
   switch (provider) {
     case "fontSquirrel":
-      console.log(`Loading more fonts for provider: ${provider}`);
       const newCount = await loadMoreFontSquirrelFonts();
 
       // Clear cache for this provider to ensure we get fresh data
@@ -151,10 +150,8 @@ export const loadMoreFontsByProvider = async (
     case "fontSource":
     case "openFoundry":
       // Currently not supported
-      console.log(`Incremental loading not supported for ${provider}`);
       return 0;
     default:
-      console.log(`Provider ${provider} does not support incremental loading`);
       return 0;
   }
 };

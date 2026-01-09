@@ -72,7 +72,6 @@ export const fetchOpenFoundryFonts = async (): Promise<OpenFoundryItem[]> => {
   isLoadingFonts = true;
 
   try {
-    console.log("Fetching fonts from Open Foundry API...");
     const response = await fetch(API_ENDPOINT, {
       headers: {
         Accept: "application/json",
@@ -90,7 +89,6 @@ export const fetchOpenFoundryFonts = async (): Promise<OpenFoundryItem[]> => {
     }
 
     const fonts = responseData.fonts as OpenFoundryItem[];
-    console.log(`Received ${fonts.length} fonts from Open Foundry API`);
 
     // Store in cache
     responseCache.processedFonts = fonts;
@@ -157,7 +155,6 @@ export const loadOpenFoundryFonts = () => {
             .load()
             .then((loadedFace) => {
               document.fonts.add(loadedFace);
-              console.log(`Loaded font directly: ${font.family}`);
             })
             .catch((err) => {
               console.error(`Failed to load font: ${font.family}`, err);
@@ -196,15 +193,6 @@ if (typeof window !== "undefined") {
       .then((fonts) => {
         if (fonts.length > 0) {
           openFoundryList = fonts;
-          console.log(`Loaded ${fonts.length} Open Foundry fonts`);
-
-          // Debug log some sample fonts
-          console.log("Open Foundry Fonts Sample:");
-          fonts.slice(0, 3).forEach((font) => {
-            console.log(`- ${font.family} (${font.sourceId})`);
-            console.log(`  Font URL: ${font.files.regular}`);
-            console.log(`  Variants: ${font.variants.join(", ")}`);
-          });
 
           // Clear the font cache to ensure the UI updates with the new fonts
           clearFontCache("all");
