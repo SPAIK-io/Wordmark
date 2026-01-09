@@ -87,7 +87,7 @@ export function DisplayCard() {
               }}
               className="[&>svg]:h-full [&>svg]:w-full"
               dangerouslySetInnerHTML={{
-                __html: colorizeSvg(aiIcon.svgData, icon.color.hex),
+                __html: aiIcon.svgData.replace(/<\?xml[^?]*\?>/g, "").trim(),
               }}
             />
           ) : (
