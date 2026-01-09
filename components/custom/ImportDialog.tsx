@@ -17,7 +17,6 @@ import { importFromFile, importStatusAtom } from "@/lib/importManager";
 import { useAtom } from "jotai";
 import { FileUp, Upload } from "lucide-react";
 import { event } from "nextjs-google-analytics";
-import posthog from "posthog-js";
 import { useRef, useState } from "react";
 
 export function ImportDialog() {
@@ -50,12 +49,6 @@ export function ImportDialog() {
       category: "import",
       label: importMode,
       value: success ? 1 : 0,
-    });
-
-    posthog.capture("import", {
-      category: "import",
-      mode: importMode,
-      success,
     });
 
     if (success) {

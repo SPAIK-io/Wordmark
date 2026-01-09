@@ -16,7 +16,6 @@ import {
 } from "@/lib/exportManager";
 import { FileJson } from "lucide-react";
 import { event } from "nextjs-google-analytics";
-import posthog from "posthog-js";
 import { useState } from "react";
 
 export function ExportMenu() {
@@ -30,11 +29,6 @@ export function ExportMenu() {
       category: "export",
       label: type,
       value: 1,
-    });
-
-    posthog.capture("export", {
-      category: "export",
-      type: type,
     });
 
     setIsOpen(false);

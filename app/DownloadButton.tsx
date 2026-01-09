@@ -16,7 +16,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { toast } from "@/components/ui/use-toast";
 import { Options } from "html-to-image/lib/types";
-import posthog from "posthog-js";
 import type { DownloadFormat } from "@/lib/types/design";
 
 const formats: DownloadFormat[] = ["png", "svg", "jpeg"];
@@ -164,10 +163,6 @@ export const DownloadButton = forwardRef<
         category: "download",
         label: format,
         value: 1,
-      });
-      posthog.capture("download", {
-        category: "download",
-        format: format,
       });
       setTimeout(() => {
         node.classList.add("delayed-survey");
